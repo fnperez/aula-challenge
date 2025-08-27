@@ -1,0 +1,83 @@
+/* global classes or styles */
+
+@layer base {
+  * {
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 400;
+  }
+
+  button {
+    cursor: pointer;
+
+    @apply transition-colors duration-200;
+
+    span svg {
+      @apply transition-colors duration-200;
+    }
+  }
+}
+
+button.primary {
+  @apply rounded-full;
+  @apply py-2 px-4;
+
+  &:hover {
+    @apply bg-primary;
+
+    span {
+      @apply text-white;
+    }
+
+    svg path {
+      @apply fill-white
+    }
+  }
+
+  &:active {
+    @apply bg-primary/80;
+  }
+
+  &.filled {
+    @apply bg-primary text-white;
+
+    span {
+      @apply text-white;
+    }
+
+    &:disabled {
+      @apply bg-neutral-middle;
+    }
+  }
+
+  &.outline {
+    @apply border border-primary text-primary;
+  
+    span {
+      @apply text-primary;
+    }
+
+    &:hover {
+      @apply bg-primary ring-primary text-white;
+
+      span {
+        @apply text-white;
+      }
+    }
+
+    &:active {
+      @apply bg-primary-light ring-primary-light;
+    }
+  }
+}
+
+button.icon {
+  @apply aspect-square rounded-full p-3;
+
+  &:hover {
+    @apply bg-border-neutral;
+  }
+
+  &:active {
+    @apply bg-border-neutral/80;
+  }
+}

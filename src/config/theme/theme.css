@@ -1,0 +1,29 @@
+@theme {
+  --color-*: initial;
+
+  /* Brand */
+  --color-primary: #022A9A;
+  --color-primary-light: #3564FD;
+  --color-primary-lighter: #E0EDFF;
+
+  /* Semantic */
+  --color-success: #1C8367;
+
+  /* Texts */
+  --color-dark: #313643;
+  --color-neutral: #606882;
+  --color-neutral-middle: #B7BFD3;
+
+  --color-border-neutral: #DEE2EC;
+
+  --color-neutral-900: #0B1220;
+  --color-neutral-600: #3A3A3A;
+  --color-neutral-400: #565656;
+  --color-neutral-200: #FAFAFA;
+  
+
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+  --default-font-family: 'Public Sans', sans-serif;
+}

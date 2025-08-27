@@ -1,0 +1,52 @@
+@import 'react-day-picker/style.css';
+.rdp-root {
+  --rdp-accent-color: var(--color-primary);
+  --rdp-accent-background-color: #E6ECF9;
+  --rdp-range_middle-background-color: #E6ECF9;
+  --rdp-range_middle-color: var(--color-dark);
+
+  --rdp-range_start-color: var(--color-white);
+  --rdp-range_start-date-background-color: var(--color-primary);
+
+  --rdp-range_end-color: var(--color-white);
+  --rdp-range_end-date-background-color: var(--color-primary);
+  --rdp-weekday-color: #3A3A3A;
+
+  .rdp-day_button,
+  .rdp-weekday,
+  .rdp-month_caption,
+  .rdp-button_next,
+  .rdp-button_previous {
+    font-family: var(--default-font-family);
+    text-transform: capitalize;
+  }
+
+  .rdp-weekday {
+    font-weight: 100;
+  }
+
+  /* Start of range → round only left side */
+  .rdp-range_start .rdp-day_button {
+    border-radius: 8px 0 0 8px;
+  }
+
+  /* End of range → round only right side */
+  .rdp-range_end .rdp-day_button {
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Middle of range → no rounding */
+  .rdp-range_middle .rdp-day_button {
+    border-radius: 0;
+  }
+
+  /* Single-day range → fully rounded */
+  .rdp-range_start.rdp-range_end .rdp-day_button {
+    border-radius: 8px; /* circle */
+  }
+
+  .rdp-selected {
+    font-weight: normal;
+    font-size: inherit;
+  }
+}

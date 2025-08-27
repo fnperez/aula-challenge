@@ -1,0 +1,32 @@
+
+
+@import 'react-range-slider-input/dist/style.css';
+.range-slider {
+  @apply bg-primary-lighter mt-6;
+
+  .range-slider__thumb[data-lower] {
+    @apply bg-primary;
+  }
+
+  .range-slider__thumb[data-upper] {
+      @apply bg-primary;
+  }
+
+  .range-slider__range {
+      @apply bg-primary;
+  }
+
+  .range-slider__thumb::after {
+    content: "$" attr(aria-valuenow);
+
+    @apply absolute -top-6 left-1/2 -translate-x-1/2 
+        bg-white text-primary text-xs 
+          px-2 py-0.5 rounded 
+          whitespace-nowrap;
+  }
+
+  /* Hide when value = 0 */
+  .range-slider__thumb[aria-valuenow="0"]::after {
+    content: none;
+  }
+}
