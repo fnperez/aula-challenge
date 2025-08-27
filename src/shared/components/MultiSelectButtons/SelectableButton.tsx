@@ -9,7 +9,7 @@ interface SelectableButtonProps {
 const SelectableButton = ({ label, selected, onClick }: SelectableButtonProps) => (
   <button
     type="button"
-    className={`primary rounded px-3 py-1 outline ${selected ? 'bg-primary-lighter' : ''}`}
+    className={`btn-primary rounded px-3 py-1 outline ${selected ? 'bg-primary-lighter' : ''}`}
     onClick={onClick}
   >
     <Text className="capitalize">{label}</Text>

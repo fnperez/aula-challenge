@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
+import type { Option } from '@core/types/option.types'
 import SelectableButton from './SelectableButton'
 
-interface MultiSelectProps {
-  items: readonly string[]
+export interface MultiSelectProps {
+  items: readonly Option[]
   selected?: string[]
 
   allowAll?: boolean
@@ -33,7 +34,7 @@ const MultiSelectButtons = ({ items, selected = [], allowAll, onChange }: MultiS
       newSelected = []
     } else {
       // select all
-      newSelected = [...items]
+      newSelected = [...items.map((item) => item.value)]
     }
 
     onChange(newSelected)
@@ -50,7 +51,12 @@ const MultiSelectButtons = ({ items, selected = [], allowAll, onChange }: MultiS
       )}
 
       {items.map((item) => (
-        <SelectableButton key={item} label={item} selected={selected.includes(item)} onClick={() => toggleItem(item)} />
+        <SelectableButton
+          key={item.value}
+          label={item.label}
+          selected={selected.includes(item.value)}
+          onClick={() => toggleItem(item.value)}
+        />
       ))}
     </div>
   )

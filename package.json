@@ -7,13 +7,20 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage --reporter=verbose"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@tailwindcss/vite": "^4.1.12",
+    "@tanstack/react-query": "^5.85.5",
+    "axios": "^1.11.0",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
+    "immer": "^10.1.1",
     "react": "^19.1.1",
     "react-day-picker": "^9.9.0",
     "react-dom": "^19.1.1",
@@ -24,14 +31,19 @@
     "react-virtuoso": "^4.14.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12",
-    "yup": "^1.7.0"
+    "yup": "^1.7.0",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.6.2",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
+    "@vitest/coverage-v8": "3.2.4",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
@@ -40,11 +52,13 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "eslint-plugin-unused-imports": "^4.2.0",
     "globals": "^16.3.0",
+    "jsdom": "^26.1.0",
     "prettier": "3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
   }
 }

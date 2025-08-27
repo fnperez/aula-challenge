@@ -1,26 +1,72 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router'
+import AppConfig from '@core/config/app'
+import { selectCards, selectPaymentMethods } from '@core/stores/transactions/selectors'
+import useTransactionsStore from '@core/stores/transactions/store'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { format } from 'date-fns'
-import TransactionFiltersSchema, { Cards, Installments, Providers, type TransactionFiltersPayload } from './schema'
+import TransactionFiltersSchema, { Installments, type TransactionFiltersPayload } from './schema'
+
+export const buildSearchParams = (payload: TransactionFiltersPayload) => ({
+  ...(payload.date?.from && { from: payload.date.from.toISOString().slice(0, 10) }),
+  ...(payload.date?.to && { to: payload.date.to.toISOString().slice(0, 10) }),
+  ...(payload.cards?.length ? { cards: payload.cards } : {}),
+  ...(payload.installments?.length ? { installments: payload.installments } : {}),
+  ...(payload.paymentMethods?.length ? { paymentMethods: payload.paymentMethods } : {}),
+  ...(payload.amount?.min !== undefined && { min: payload.amount.min.toString(10) }),
+  ...(payload.amount?.max && { max: payload.amount.max.toString(10) }),
+})
 
 const defaults = {
   date: {
     from: undefined,
     to: undefined,
   },
-  cards: [],
-  installments: [],
-  providers: [],
+  cards: [] as string[],
+  installments: [] as string[],
+  paymentMethods: [] as string[],
   amount: {
     min: undefined,
     max: undefined,
   },
 }
+
 const useTransactionFilters = () => {
   const [filtersShown, setFiltersShown] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
+  const cards = useTransactionsStore(selectCards)
+  const paymentMethods = useTransactionsStore(selectPaymentMethods)
+
+  const formValues = useMemo(
+    () => ({
+      date: searchParams.has('from')
+        ? {
+            from: new Date(searchParams.get('from')!),
+            to: searchParams.get('to') ? new Date(searchParams.get('to')!) : undefined,
+          }
+        : defaults.date,
+      cards: searchParams.has('cards') ? searchParams.getAll('cards') : defaults.cards,
+      paymentMethods: searchParams.has('paymentMethods')
+        ? searchParams.getAll('paymentMethods')
+        : defaults.paymentMethods,
+      installments: searchParams.has('installments') ? searchParams.getAll('installments') : defaults.installments,
+      amount: searchParams.has('min')
+        ? {
+            min: Number(searchParams.get('min')),
+            max: Number(searchParams.get('max')),
+          }
+        : defaults.amount,
+    }),
+    [searchParams],
+  )
+
+  const filtersApplied =
+    searchParams.has('from') ||
+    searchParams.has('cards') ||
+    searchParams.has('paymentMethods') ||
+    searchParams.has('installments') ||
+    searchParams.has('min') ||
+    searchParams.has('max')
 
   const {
     control,
@@ -29,30 +75,9 @@ const useTransactionFilters = () => {
     resetField,
     reset: resetForm,
   } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(TransactionFiltersSchema),
-    defaultValues: {
-      date: searchParams.has('from')
-        ? {
-            from: new Date(searchParams.get('from')!),
-            to: searchParams.get('to') ? new Date(searchParams.get('to')!) : undefined,
-          }
-        : defaults.date,
-      cards: searchParams.has('cards')
-        ? searchParams.getAll('cards').filter((card) => Cards.includes(card))
-        : defaults.cards,
-      installments: searchParams.has('installments')
-        ? searchParams.getAll('installments').filter((installment) => Installments.includes(installment))
-        : defaults.installments,
-      providers: searchParams.has('providers')
-        ? searchParams.getAll('providers').filter((provider) => Providers.includes(provider))
-        : defaults.providers,
-      amount: searchParams.has('min')
-        ? {
-            min: Number(searchParams.get('min')),
-            max: Number(searchParams.get('max')),
-          }
-        : defaults.amount,
-    },
+    defaultValues: formValues,
   })
 
   const handleDrawerOpen = useCallback(() => {
@@ -64,26 +89,19 @@ const useTransactionFilters = () => {
   }, [resetForm])
   const resetDate = useCallback(() => resetField('date', { defaultValue: defaults.date }), [resetField])
   const resetCards = useCallback(() => resetField('cards', { defaultValue: defaults.cards }), [resetField])
+  const resetAmount = useCallback(() => resetField('amount', { defaultValue: defaults.amount }), [resetField])
   const resetInstallments = useCallback(
     () => resetField('installments', { defaultValue: defaults.installments }),
     [resetField],
   )
-  const resetAmount = useCallback(() => resetField('amount', { defaultValue: defaults.amount }), [resetField])
-  const resetProviders = useCallback(() => resetField('providers', { defaultValue: defaults.providers }), [resetField])
+  const resetPaymentMethods = useCallback(
+    () => resetField('paymentMethods', { defaultValue: defaults.paymentMethods }),
+    [resetField],
+  )
 
   const onSubmit = useCallback(
     (payload: TransactionFiltersPayload) => {
-      const params: Record<string, string | string[]> = {
-        ...(payload.date?.from && { from: format(payload.date.from, 'yyyy-MM-dd') }),
-        ...(payload.date?.to && { to: format(payload.date.to, 'yyyy-MM-dd') }),
-        ...(payload.cards?.length ? { cards: payload.cards } : {}),
-        ...(payload.installments?.length ? { installments: payload.installments } : {}),
-        ...(payload.providers?.length ? { providers: payload.providers } : {}),
-        ...(!!payload.amount?.min && { min: payload.amount.min.toString(10) }),
-        ...(payload.amount?.max && { max: payload.amount.max.toString(10) }),
-      }
-
-      setSearchParams(params)
+      setSearchParams(buildSearchParams(payload))
       setFiltersShown(false)
     },
     [setSearchParams],
@@ -96,33 +114,43 @@ const useTransactionFilters = () => {
         isDirty,
         isValid,
         reset,
+        filtersApplied,
+      },
+      configs: {
+        dateMax: AppConfig.filters.date.max,
+        dateMin: AppConfig.filters.date.min,
+        amountMax: AppConfig.filters.amount.max,
+        amountMin: AppConfig.filters.amount.min,
       },
       filtersShown,
-      cardsOptions: Cards,
-      installmentsOptions: Installments,
-      providerOptions: Providers,
+      cardsOptions: cards,
+      paymentMethodOptions: paymentMethods,
+      installmentOptions: Installments,
+      resetInstallments,
       resetDate,
       resetCards,
-      resetInstallments,
       resetAmount,
-      resetProviders,
+      resetPaymentMethods,
       handleDrawerOpen,
       onSubmit: handleSubmit(onSubmit),
     }),
     [
+      cards,
       control,
+      filtersApplied,
       filtersShown,
       handleDrawerOpen,
       handleSubmit,
       isDirty,
       isValid,
       onSubmit,
+      paymentMethods,
       reset,
       resetAmount,
       resetCards,
       resetDate,
       resetInstallments,
-      resetProviders,
+      resetPaymentMethods,
     ],
   )
 }

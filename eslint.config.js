@@ -18,6 +18,7 @@ export default tseslint.config(
       'node_modules',
       'eslint.config.*',
       'vite.config.*',
+      'setupTests.ts',
       'prettier.config.*',
     ],
   },
@@ -66,6 +67,16 @@ export default tseslint.config(
     },
   },
 
-  // 5) Let Prettier handle formatting (turns off conflicting style rules)
+  // 5) Disable rules for testing only
+  {
+    files: ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+    rules: {
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+    },
+  },
+
+  // 6) Let Prettier handle formatting (turns off conflicting style rules)
   prettier,
 );

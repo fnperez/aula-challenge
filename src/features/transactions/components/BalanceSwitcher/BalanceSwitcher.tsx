@@ -10,7 +10,7 @@ const BalanceSwitcher = () => {
       <Text as="h1" size="h2" weight="font-semibold" className="ml-6">
         Tus cobros
       </Text>
-      <Tabs selectedKey={presenter.selectedKey} items={presenter.options} onItemChange={presenter.setSelectedKey} />
+      <Tabs selectedKey={presenter.selectedKey} items={presenter.tabs} onItemChange={presenter.setSelectedKey} />
     </div>
   )
 }

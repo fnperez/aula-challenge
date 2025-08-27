@@ -3,7 +3,7 @@ import TransactionFilters from '@features/transactions/components/TransactionFil
 import TransactionList from '@features/transactions/components/TransactionList/TransactionList'
 import Text from '@shared/components/Typography/Typography'
 
-const MyTransactions = () => {
+const ListView = () => {
   return (
     <section className="mx-auto flex w-full max-w-[440px] flex-col gap-6 xl:max-w-[572px]">
       <BalanceSwitcher />
@@ -20,4 +20,4 @@ const MyTransactions = () => {
   )
 }
 
-export default MyTransactions
+export default ListView

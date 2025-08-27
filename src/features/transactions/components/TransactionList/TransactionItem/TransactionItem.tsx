@@ -1,6 +1,18 @@
+import { selectEntityById } from '@core/stores/transactions/selectors'
+import useTransactionsStore from '@core/stores/transactions/store'
 import Text from '@shared/components/Typography/Typography'
+import { formatARS } from '@shared/utils/currency'
+import { format } from 'date-fns'
 
-const TransactionItem = () => {
+export interface TransactionItemProps {
+  id: string
+}
+
+const TransactionItem = ({ id }: TransactionItemProps) => {
+  const item = useTransactionsStore(selectEntityById(id))!
+
+  if (!item) return null
+
   return (
     <div className="border-border-neutral flex items-center justify-between border-b-1 px-2 py-2">
       <div className="flex items-center gap-2">
@@ -13,20 +25,20 @@ const TransactionItem = () => {
         </svg>
 
         <div className="flex flex-col">
-          <Text weight="font-semibold" color="text-dark">
-            Link de pago
+          <Text weight="font-semibold" color="text-dark" className="capitalize">
+            {item.card}
           </Text>
-          <Text weight="font-thin" color="text-neutral">
-            Venta
+          <Text weight="font-thin" color="text-neutral" className="first-letter:capitalize">
+            {item.paymentMethod} ({item.installments} cuota{item.installments > 1 ? 's' : ''})
           </Text>
         </div>
       </div>
       <div className="flex flex-col items-end">
         <Text color="text-success" weight="font-semibold">
-          +$560,00
+          {formatARS(item.amount)}
         </Text>
         <Text color="text-neutral" weight="font-thin">
-          00/00/0000
+          {format(item.createdAt, 'dd/MM/yyyy')}
         </Text>
       </div>
     </div>

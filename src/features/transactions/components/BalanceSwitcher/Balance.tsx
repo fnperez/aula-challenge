@@ -1,23 +1,25 @@
+import '@core/stores/transactions/selectors'
+import { NavLink } from 'react-router'
 import Icon from '@shared/components/Icon/Icon'
 import Text from '@shared/components/Typography/Typography'
+import { formatARSParts } from '@shared/utils/currency'
 
 interface BalanceProps {
-  period: 'weekly' | 'daily' | 'monthly'
+  amount: number
 }
 
-const Balance = ({ period }: BalanceProps) => {
-  // TODO: read from store using period
+const Balance = ({ amount }: BalanceProps) => {
+  const { int, decimals } = formatARSParts(amount)
 
   return (
     <div className="flex flex-col items-center gap-4">
       <Text color="text-dark" size="xl" weight="font-extralight">
-        +$35.000,
-        <span className="text-[70%] font-light">00</span>
+        +$ {int},<span className="text-[70%] font-light">{decimals}</span>
       </Text>
 
-      <button className="primary flex items-center gap-1">
+      <NavLink to="/metrics" className="btn-primary flex items-center gap-1">
         <Icon name="analyze" /> <Text color="text-primary">Ver métricas</Text>
-      </button>
+      </NavLink>
     </div>
   )
 }

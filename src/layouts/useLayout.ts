@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useTransactions } from '@core/hooks/useTransactions'
 
 const useDashboard = () => {
+  const { isLoading, error } = useTransactions()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleClick = useCallback(() => {
@@ -9,10 +11,12 @@ const useDashboard = () => {
 
   return useMemo(
     () => ({
-      handleClick,
+      error,
+      isLoading,
       isOpen,
+      handleClick,
     }),
-    [handleClick, isOpen],
+    [error, handleClick, isLoading, isOpen],
   )
 }
 

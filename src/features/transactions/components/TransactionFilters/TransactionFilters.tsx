@@ -15,10 +15,13 @@ const TransactionFilters = () => {
 
   return (
     <div>
-      <button className="icon p-3" onClick={presenter.handleDrawerOpen}>
+      <button className="btn-icon relative p-3" onClick={presenter.handleDrawerOpen}>
         <Icon name="filter" />
+        {presenter.form.filtersApplied && (
+          <div data-testid="filters-dot" className="bg-primary absolute top-2 right-1 aspect-square h-4 rounded-full" />
+        )}
       </button>
-      <button className="icon p-3">
+      <button className="btn-icon p-3">
         <Icon name="download" />
       </button>
       <Portal>
@@ -62,9 +65,11 @@ const TransactionFilters = () => {
                     mode="range"
                     selected={field.value as DateRange}
                     onSelect={field.onChange}
+                    disabled={[{ before: presenter.configs.dateMin, after: presenter.configs.dateMax }]}
+                    excludeDisabled
                     footer={
                       <div className="mt-3 flex justify-end">
-                        <button className="primary outline" onClick={presenter.resetDate}>
+                        <button className="btn-primary outline" onClick={presenter.resetDate}>
                           <Text weight="font-[100]">Borrar</Text>
                         </button>
                       </div>
@@ -104,7 +109,7 @@ const TransactionFilters = () => {
                   onClose={presenter.resetInstallments}
                 >
                   <MultiSelectButtons
-                    items={presenter.installmentsOptions}
+                    items={presenter.installmentOptions}
                     selected={field.value as string[]}
                     onChange={field.onChange}
                     allowAll
@@ -112,6 +117,7 @@ const TransactionFilters = () => {
                 </SwitchContainer>
               )}
             />
+
             <Controller
               control={presenter.form.control}
               name="amount"
@@ -123,9 +129,8 @@ const TransactionFilters = () => {
                   onClose={presenter.resetAmount}
                 >
                   <RangeSlider
-                    min={0}
-                    max={10000}
-                    step={100}
+                    min={presenter.configs.amountMin}
+                    max={presenter.configs.amountMax}
                     thumbsDisabled={[false, false]}
                     value={[field.value?.min || 0, field.value?.max || 0]}
                     onInput={([min, max]) => field.onChange({ min, max })}
@@ -136,16 +141,16 @@ const TransactionFilters = () => {
 
             <Controller
               control={presenter.form.control}
-              name="providers"
+              name="paymentMethods"
               render={({ field }) => (
                 <SwitchContainer
                   title="Métodos de cobro"
                   open={!!field.value?.length}
                   icon={<Icon name="categories" />}
-                  onClose={presenter.resetProviders}
+                  onClose={presenter.resetPaymentMethods}
                 >
                   <MultiSelectButtons
-                    items={presenter.providerOptions}
+                    items={presenter.paymentMethodOptions}
                     selected={field.value as string[]}
                     onChange={field.onChange}
                     allowAll
@@ -154,8 +159,13 @@ const TransactionFilters = () => {
               )}
             />
 
-            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-            <button disabled={!presenter.form.isValid} className="primary filled mt-auto" onClick={presenter.onSubmit}>
+            {}
+            <button
+              disabled={!presenter.form.isValid}
+              className="btn-primary filled mt-auto"
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onClick={presenter.onSubmit}
+            >
               <Text>Aplicar filtros</Text>
             </button>
           </div>

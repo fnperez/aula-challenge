@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Switch from '../Switch/Switch'
 import Text from '../Typography/Typography'
 
-interface Props {
+export interface SwitchContainerProps extends PropsWithChildren {
   title: string
   icon?: ReactElement
   className?: string
@@ -11,7 +11,7 @@ interface Props {
   onClose?: () => void
 }
 
-const SwitchContainer = ({ title, icon, open = false, onClose, className, children }: PropsWithChildren<Props>) => {
+const SwitchContainer = ({ title, icon, open = false, onClose, className, children }: SwitchContainerProps) => {
   const [isOpen, setIsOpen] = useState(open)
 
   const handleClose = useCallback(

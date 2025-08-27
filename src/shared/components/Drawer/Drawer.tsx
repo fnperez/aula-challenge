@@ -60,7 +60,7 @@ const Drawer = ({
         {(back || title) && (
           <div className="flex items-center md:p-4">
             {back && (
-              <button className="icon" onClick={onClose}>
+              <button className="btn-icon" onClick={onClose}>
                 <Icon name="left" size={24} />
               </button>
             )}

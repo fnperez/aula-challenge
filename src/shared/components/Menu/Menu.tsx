@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { NavLink, type NavLinkRenderProps } from 'react-router'
-import Icon from '@shared/components/Icon/Icon.tsx'
-import Text from '@shared/components/Typography/Typography.tsx'
+import Icon from '@shared/components/Icon/Icon'
+import Text from '@shared/components/Typography/Typography'
 import classNames from 'classnames'
 
 const Menu = () => {
@@ -41,8 +41,8 @@ const Menu = () => {
           Descargá la app desde
         </Text>
         <div className="flex flex-col items-center gap-4">
-          <img src="/store_android.jpg" width={136} alt="Descargá la app desde android" />
-          <img src="/store_ios.jpg" width={136} alt="Descargá la app desde ios" />
+          <img src="/store_android.jpg" alt="Descargá la app desde android" className="w-[136px] lg:w-[176px]" />
+          <img src="/store_ios.jpg" alt="Descargá la app desde ios" className="w-[136px] lg:w-[176px]" />
         </div>
       </div>
     </div>

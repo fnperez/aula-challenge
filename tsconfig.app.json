@@ -22,14 +22,17 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    
+    /* Types */
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
 
     /* Aliases */
     "baseUrl": ".",
     "paths": {
-      "@config/*": ["./src/config/*"],
-      "@shared/*": ["./src/shared/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@features/*": ["./src/features/*"]
+      "@core/*": ["./src/core/*"],
+      "@features/*": ["./src/features/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": ["src"],

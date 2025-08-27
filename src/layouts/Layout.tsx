@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router'
-import avatar from '@assets/Photo.jpg'
-import Icon from '@shared/components/Icon/Icon.tsx'
-import useDashboard from '@shared/components/Layout/Dashboard/useDashboard.ts'
-import Menu from '@shared/components/Menu/Menu.tsx'
-import UserAvatar from '@shared/components/UserAvatar/UserAvatar.tsx'
+import Drawer from '@shared/components/Drawer/Drawer'
+import Icon from '@shared/components/Icon/Icon'
+import Menu from '@shared/components/Menu/Menu'
+import UserAvatar from '@shared/components/UserAvatar/UserAvatar'
 import classNames from 'classnames'
-import Drawer from '../../Drawer/Drawer'
+import useLayout from './useLayout'
 
-const Dashboard = () => {
-  const { isOpen, handleClick } = useDashboard()
+const Layout = () => {
+  const { isOpen, handleClick } = useLayout()
 
   return (
     <div id="dashboard" className="relative flex h-[100vh] w-[100vw] overflow-x-hidden">
@@ -36,7 +35,7 @@ const Dashboard = () => {
         )}
       >
         <header className="relative flex w-full items-center rounded-bl-[32px] bg-white px-2 py-4 shadow md:rounded-none">
-          <UserAvatar name="Facundo Perez" src={avatar} className="hidden md:flex" />
+          <UserAvatar name="Facundo Perez" src="/avatar.jpg" className="hidden md:flex" />
           <button className="p-2 md:hidden" onClick={handleClick} aria-label="Abrir menu">
             <Icon name="menu" />
           </button>
@@ -52,4 +51,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Layout
